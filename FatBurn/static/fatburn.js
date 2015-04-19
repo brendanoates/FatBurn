@@ -2,9 +2,12 @@
  * Created by boates on 4/16/2015.
  */
 
-$(document).ready(function ($) {
-    $('.test1').click(function(){
-      $(this).addClass('active');
-      $(this).parent().children('li').not(this).removeClass('active');
-    });
+var jumboHeight = $('.jumbotron').outerHeight();
+function parallax(){
+    var scrolled = $(window).scrollTop();
+    $('.bg').css('height', (jumboHeight-scrolled) + 'px');
+}
+
+$(window).scroll(function(e){
+    parallax();
 });

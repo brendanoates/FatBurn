@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from django.core.urlresolvers import reverse
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -37,7 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'FatBurn'
+    'django_browserid',
+    'FatBurn',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -68,6 +70,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'FatBurn.wsgi.application'
 
@@ -105,3 +108,45 @@ STATIC_URL = '/static/'
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
 )
+
+AUTHENTICATION_BACKENDS = (
+   # ...
+   'django.contrib.auth.backends.ModelBackend', # required for admin
+   'django_browserid.auth.BrowserIDBackend',
+   # ...
+)
+TEMPLATE_CONTEXT_PROCESSORS = (
+   # ...
+   'django_browserid.context_processors.browserid',
+   # ...
+)
+
+SITE_URL = 'http://localhost:8000/'
+
+SESSION_COOKIE_SECURE = False
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake'
+    }
+}
+
+LOGGING = {
+   'version': 1,
+   'handlers': {
+       'console':{
+           'level': 'DEBUG',
+           'class': 'logging.StreamHandler'
+       },
+   },
+   'loggers': {
+       'django_browserid': {
+           'handlers': ['console'],
+           'level': 'DEBUG',
+       }
+   },
+}
+
+LOGIN_REDIRECT_URL = SITE_URL +'home/'
+LOGIN_REDIRECT_URL_FAILURE = SITE_URL +'home/'

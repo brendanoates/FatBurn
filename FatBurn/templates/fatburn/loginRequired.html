@@ -1,7 +1,5 @@
 {% extends 'fatburn\base.html' %}
 
 {% block header_text %}{{title}}{% endblock %}
-{% block content %}
-    {{ body_content }}
-{% endblock %}
+{% block content %}{{ body_content|safe }}{% endblock %}
 

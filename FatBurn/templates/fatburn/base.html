@@ -1,3 +1,4 @@
+{% load browserid %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -6,10 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="/static/base.css" rel="stylesheet" media="screen">
+    {% browserid_css %}
 </head>
 <body>
-<div class="container">
-    <nav class="navbar navbar-inverse">
+{% browserid_info %}
+<div class="bg"></div>
+
+    <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -21,13 +25,24 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav" >
-            <li><a href="/home/" >Home</a></li>
-            <li><a href="/startTheBurn/">Start The Burn</a></li>
+              <li><a href="/home/" >Home</a></li>
+              {% if user.is_authenticated %}
+                <li><a href="/startTheBurn/">Start The Burn</a></li>
+              {% else %}
+                <li><a href="/loginRequired/">Start The Burn</a></li>
+              {% endif %}
             <li><a href="/about/">About</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+              {% if user.is_superuser %}
+                  <li><a href="/admin/">admin</a></li>
+              {% endif %}
+              {% if user.is_authenticated %}
+                  <li>Current user: {{ user.email }}</li>
+                  <li>{% browserid_logout text='Logout' %}</li>
+              {% else %}
+                  <li>{% browserid_login text='Login' color='dark' %}</li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -37,29 +52,23 @@
         <div class="col-md-10 col-md-offset-1 jumbotron">
             <div class="text-center">
                 <h1>{% block header_text %}{% endblock %}</h1>
-                <form method="POST" action="{% block form_action %}{% endblock %}">
-                    {{ form.text }}
-                    {%  csrf_token %}
-                    {% if form.errors %}
-                        <div class="form-group has-error">
-                            <span class="help-block">{{ form.text.errors }}</span>
-                        </div>
-                    {% endif %}
-                </form>
+            </div>
+            <p class="lead"></p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                {% block content %}
+                {% endblock %}
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            {% block content %}
-            {% endblock %}
-        </div>
-    </div>
 
-</div>
     <script src="http://code.jquery.com/jquery.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/fatburn.js"></script>
+    {% browserid_js %}
 </body>
 </html>
