@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.views.generic import View
 class Home(View):
     def get(self, request):
-        content = u'<xmp><h2>Page Content</h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius ' \
+        content = u'<h2>Page Content</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius ' \
                   u'quam sit amet vulputate.    Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a ' \
                   u'libero. Aenean sit amet felis    dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. ' \
                   u'Duis elementum auctor accumsan.    Aliquam in felis sit amet augue.    <br>    Lorem ipsum dolor sit ' \
@@ -33,7 +33,7 @@ class Home(View):
                   u'dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.    Quisque ' \
                   u'mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis    dolor, in ' \
                   u'sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.    Aliquam ' \
-                  u'in felis sit amet augue.</xmp>'
+                  u'in felis sit amet augue.</p>'
         context = {'title':'Home', 'body_content':content}
         return render(request, 'fatburn/home.html',context)
 
