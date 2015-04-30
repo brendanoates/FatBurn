@@ -1,13 +1,17 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.shortcuts import render
+from FatBurn import settings
 from FatBurn.helpers import ParagraphErrorList
-from FatBurn.models import Person
+from FatBurn.models import Person, Exercise
 from django.http import HttpResponseRedirect
 from .forms import UserDetailsForm
 __author__ = 'boates'
 from django.http import HttpResponse
 from django.views.generic import View
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 class Home(View):
     def get(self, request):
         content = u'<h2>Page Content</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius ' \
@@ -42,10 +46,15 @@ class Home(View):
         context = {'title':'Home', 'body_content':content}
         return render(request, 'fatburn/home.html',context)
 
-class StartTheBurn(View):
-    def get(self, request):
-        context = {'title':'Start The Burn'}
 
+class StartTheBurn(View):
+
+    @method_decorator(login_required())
+    def get(self, request):
+        user = request.user
+        exercises=Exercise.objects.all()
+
+        context = {'title':'Start The Burn', 'exercises':exercises}
         return render(request, 'fatburn/startTheBurn.html',context)
 
 

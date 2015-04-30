@@ -150,3 +150,9 @@ LOGGING = {
 
 LOGIN_REDIRECT_URL = SITE_URL +'home/'
 LOGIN_REDIRECT_URL_FAILURE = SITE_URL +'home/'
+LOGIN_URL = SITE_URL + 'loginRequired/'
+
+LOCAL_ROOT = os.path.dirname(os.path.dirname(__file__))
+HTDOCS_ROOT = '/htdocs/'
+MEDIA_ROOT = os.path.join(LOCAL_ROOT,'FatBurn/static/media/')
+MEDIA_URL = '/static/media/'

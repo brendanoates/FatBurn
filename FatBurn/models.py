@@ -17,5 +17,11 @@ class Person(models.Model):
     def get_bmi(self):
         return self.start_weight/(self.height*self.height)
 
+class Exercise(models.Model):
+    name = models.CharField(max_length=30)
+    picture = models.ImageField()
+
+    def __unicode__(self):
+        return '{}'.format(self.name)
 
 
