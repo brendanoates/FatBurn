@@ -3,6 +3,6 @@
 {% block header_text %}{{title}}{% endblock %}
 {% block content %} 
     {% for exercise in exercises %}
-        {{ exercise.name }} <img src={{ exercise.picture.url }}>
+        {{ exercise.name }} <img src={{ exercise.picture.url }}><br>
     {% endfor %}
 {% endblock %}
