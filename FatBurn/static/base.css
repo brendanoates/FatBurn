@@ -5,7 +5,11 @@
    background-color: #ffffff;
    background: transparent;
 }
-
+#username {
+    line-height: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
 .navbar li { color: #000 }
 
 .bg {
@@ -23,4 +27,7 @@
   color: white;
   background:transparent;
   text-shadow: black 0.3em 0.3em 0.3em;
+}
+.error {
+    color:red;
 }

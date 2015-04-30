@@ -38,7 +38,8 @@
                   <li><a href="/admin/">admin</a></li>
               {% endif %}
               {% if user.is_authenticated %}
-                  <li>Current user: {{ user.email }}</li>
+                                    <li id="username">Logged in user: {{ user.first_name }}</li>
+                  <li><a href="/userDetails/">Update Details</a></li>
                   <li>{% browserid_logout text='Logout' %}</li>
               {% else %}
                   <li>{% browserid_login text='Login' color='dark' %}</li>

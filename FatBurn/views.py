@@ -1,5 +1,10 @@
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.shortcuts import render
-
+from FatBurn.helpers import ParagraphErrorList
+from FatBurn.models import Person
+from django.http import HttpResponseRedirect
+from .forms import UserDetailsForm
 __author__ = 'boates'
 from django.http import HttpResponse
 from django.views.generic import View
@@ -43,6 +48,7 @@ class StartTheBurn(View):
 
         return render(request, 'fatburn/startTheBurn.html',context)
 
+
 class LoginRequired(View):
     def get(self, request):
         content = '''<p>To be able to access this page you are required to login, we use <a href="https://www.mozilla.org/persona/" target="_blank">Mozilla Persona</a> to manage this.</p>''' \
@@ -54,3 +60,46 @@ class About(View):
     def get(self, request):
         context = {'title':'About'}
         return render(request, 'fatburn/about.html',context)
+
+def userDetails(request):
+    if request.method == 'GET':
+        try:
+            person, created = Person.objects.get_or_create(user=request.user)
+            user = request.user
+            if created:
+                person.save()
+            form = UserDetailsForm(
+                initial={
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'start_weight': person.start_weight,
+                    'height': person.height,
+                },
+            )
+        except:
+            pass
+
+            #todo log this exception
+        context = {'title':'Update Your Details', 'person':person, 'form':form }
+
+        return render(request, 'fatburn/userDetails.html',context)
+
+    else: #POST
+        try:
+            form = UserDetailsForm(data=request.POST, error_class=ParagraphErrorList)
+            if form.is_valid():
+                user = User.objects.get(id=request.user.id)
+                person = Person.objects.get(user=user)
+                user.first_name = form.cleaned_data.get('first_name', '')
+                user.last_name = form.cleaned_data.get('last_name', '')
+                person.start_weight = form.cleaned_data.get('start_weight', '')
+                person.height = form.cleaned_data.get('height', '')
+                user.save()
+                person.save()
+        except ValidationError:
+            raise
+        except:
+            raise ValidationError("#Ooops an exception occurred during update. check logs for details")
+            #todo log this exception
+        context = {'title':'Updated Details', 'form':form}
+    return render(request, 'fatburn/userDetails.html',context)
